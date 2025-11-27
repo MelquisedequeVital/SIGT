@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router'; // Mantenha para rotas no template, se necessário
-import { TccService } from '../../services/tcc.service';
-import { TCC } from '../../models/tcc.model';
+import { TccService } from '../../service/tcc-service';
+import { TCC } from '../../model/tcc-model';
 
 @Component({
   selector: 'app-tcc-registration',

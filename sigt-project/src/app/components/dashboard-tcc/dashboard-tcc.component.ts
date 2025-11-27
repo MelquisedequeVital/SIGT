@@ -1,53 +1,50 @@
-import { Component, computed, effect, signal, OnInit } from '@angular/core';
+import { Component, computed, effect, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { TccService } from '../../services/tcc.service';
-import { TCC } from '../../models/tcc.model';
+
+import { TccStore } from '../../store/tcc-store';
+import { TCC } from '../../model/tcc-model';
 
 @Component({
   selector: 'app-dashboard-tcc',
   standalone: true,
-  // Adicione RouterModule para futuros botões de navegação (ex: ir para Cadastro)
-  imports: [CommonModule, RouterModule], 
+  imports: [CommonModule, RouterModule],
   templateUrl: './dashboard-tcc.component.html',
   styleUrls: ['./dashboard-tcc.component.css']
 })
 export class DashboardTccComponent implements OnInit {
-  // 🟢 SIGNS: Lógica de listagem e estado movida
-  tccs = signal<TCC[]>([]);
-  loading = signal(false);
-  error = signal<string | null>(null);
+
+  tccs: any;
+  loading: any;
+  error: any;
+
   selectedTccId = signal<number | null>(null);
 
-  // 💻 Signal computado: TCC selecionado
-  selectedTcc = computed(() => this.tccs().find(t => t.id === this.selectedTccId()));
+  selectedTcc = computed<TCC | null>(() => {
+    const list = this.tccs();
+    const id = this.selectedTccId();
 
-  constructor(private service: TccService) {
-    // Efeito para limpar erro
+    if (!Array.isArray(list)) return null;
+    if (id === null) return null;
+
+    return list.find(t => t.id === id) ?? null;
+  });
+
+  constructor(private store: TccStore) {
+
+    this.tccs = this.store.tccList$;
+    this.loading = this.store.loading$;
+    this.error = this.store.error$;
+
     effect(() => {
       if (this.error()) {
-        setTimeout(() => this.error.set(null), 4000);
+        setTimeout(() => this.store.clearError(), 3000);
       }
     });
-  }
-  
-  ngOnInit(): void {
-    // 🌐 Carrega os dados na inicialização
-    this.loadTccs();
   }
 
-  loadTccs() {
-    this.loading.set(true);
-    this.service.getScheduledTccs().subscribe({
-      next: (list) => {
-        this.tccs.set(list || []);
-        this.loading.set(false);
-      },
-      error: (err) => {
-        this.error.set('Erro ao carregar TCCs');
-        this.loading.set(false);
-      }
-    });
+  ngOnInit(): void {
+    this.store.loadTccs();
   }
 
   selectTcc(id?: number) {
@@ -57,8 +54,7 @@ export class DashboardTccComponent implements OnInit {
   formatDate(d?: string) {
     if (!d) return '-';
     try {
-      const dt = new Date(d);
-      return dt.toLocaleDateString();
+      return new Date(d).toLocaleDateString();
     } catch {
       return d;
     }

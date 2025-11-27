@@ -1,54 +1,59 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { TccService } from '../service/tcc-service';
+import { TCC } from '../model/tcc-model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TccStore {
-  private tasks = signal<any[]>([]);
+  private tccList = signal<TCC[]>([]);
   private loading = signal(false);
   private error = signal<string | null>(null);
 
-  tasks$ = computed(() => this.tasks());
+  tccList$ = computed(() => this.tccList());
   loading$ = computed(() => this.loading());
   error$ = computed(() => this.error());
 
   constructor(private tccService: TccService) {}
 
-  loadTasks() {
+  loadTccs() {
     this.loading.set(true);
     this.error.set(null);
 
-    this.tccService.getTasks().subscribe({
+    this.tccService.getTccs().subscribe({
       next: (data) => {
-        this.tasks.set(data);
+        this.tccList.set(data);
         this.loading.set(false);
       },
-      error: (err) => {
-        this.error.set('Erro ao carregar dados');
+      error: () => {
+        this.error.set('Erro ao carregar TCCs');
         this.loading.set(false);
       },
     });
   }
 
-  addTask(task: any) {
-    this.tccService.createTask(task).subscribe({
-      next: () => this.loadTasks(),
-      error: () => this.error.set('Erro ao criar registro'),
+  addTcc(tcc: TCC) {
+    this.tccService.createTcc(tcc).subscribe({
+      next: () => this.loadTccs(),
+      error: () => this.error.set('Erro ao criar TCC'),
     });
   }
 
-  updateTask(id: number, task: any) {
-    this.tccService.updateTask(id, task).subscribe({
-      next: () => this.loadTasks(),
-      error: () => this.error.set('Erro ao atualizar'),
+  updateTcc(id: number, tcc: TCC) {
+    this.tccService.updateTcc(id, tcc).subscribe({
+      next: () => this.loadTccs(),
+      error: () => this.error.set('Erro ao atualizar TCC'),
     });
   }
 
-  removeTask(id: number) {
-    this.tccService.deleteTask(id).subscribe({
-      next: () => this.loadTasks(),
-      error: () => this.error.set('Erro ao excluir'),
+  removeTcc(id: number) {
+    this.tccService.deleteTcc(id).subscribe({
+      next: () => this.loadTccs(),
+      error: () => this.error.set('Erro ao excluir TCC'),
     });
+  }
+
+  clearError() {
+    this.error.set(null);
   }
 }
