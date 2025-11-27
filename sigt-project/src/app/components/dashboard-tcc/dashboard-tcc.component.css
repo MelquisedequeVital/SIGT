@@ -1,3 +1,4 @@
+@use "tailwindcss";
 /* src/app/components/dashboard-tcc/dashboard-tcc.component.css */
 :host {
     --suap-primary: #0A5EA8; /* Azul principal do SUAP */

@@ -1,9 +1,8 @@
 import { Component, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormGroup } from '@angular/forms';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { RouterModule } from '@angular/router'; // Mantenha para rotas no template, se necessário
-import { TccService } from '../../service/tcc-service';
+import { FormGroup, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { TccStore } from '../../store/tcc-store';
 import { TCC } from '../../model/tcc-model';
 
 @Component({
@@ -16,30 +15,32 @@ import { TCC } from '../../model/tcc-model';
 export class TccRegistrationComponent {
   form: FormGroup;
 
-  // 🟢 SIGNS: Apenas lógica de submissão e feedback
-  loading = signal(false);
-  error = signal<string | null>(null);
   success = signal<boolean>(false);
+  
+  readonly loading;
+  readonly error;
 
-  constructor(private fb: FormBuilder, private service: TccService) {
+  constructor(private fb: FormBuilder, private store: TccStore) {
+    this.loading = this.store.loading$;
+    this.error = this.store.error$;
+
     this.form = this.fb.group({
-      studentName: ['', [Validators.required]],
-      studentId: ['', [Validators.required]],
-      advisorName: ['', [Validators.required]],
-      title: ['', [Validators.required]],
+      studentName: ['', Validators.required],
+      studentId: ['', Validators.required],
+      advisorName: ['', Validators.required],
+      title: ['', Validators.required],
       summary: [''],
       modality: ['presencial'],
       scheduledDate: [''],
       scheduledTime: [''],
       location: [''],
       committee: ['']
-  });
+    });
 
-    // Efeito para limpar erro/sucesso após um tempo
     effect(() => {
-      if (this.error() || this.success()) {
+      if (this.store.error$() || this.success()) {
         setTimeout(() => {
-          this.error.set(null);
+          this.store.clearError();
           this.success.set(false);
         }, 4000);
       }
@@ -52,36 +53,26 @@ export class TccRegistrationComponent {
       return;
     }
 
-    this.loading.set(true);
-    this.error.set(null);
-
     const value = this.form.value;
+
     const payload: TCC = {
-      // Usamos '!' pois os validadores garantem a presença nos campos requeridos
       studentName: value.studentName!,
       studentId: value.studentId!,
       advisorName: value.advisorName!,
       title: value.title!,
       summary: value.summary || undefined,
-      status: 'cadastrada', // Define o status inicial
-      modality: value.modality as 'presencial' | 'remoto' | 'hibrido',
+      status: 'cadastrada',
+      modality: value.modality,
       scheduledDate: value.scheduledDate || undefined,
       scheduledTime: value.scheduledTime || undefined,
       location: value.location || undefined,
       committee: value.committee ? value.committee.split(',').map((s: string) => s.trim()) : []
     };
 
-    // 🌐 Requisição assíncrona
-    this.service.createTcc(payload).subscribe({
-      next: () => {
-        this.form.reset({ modality: 'presencial' });
-        this.success.set(true);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.error.set('Erro ao cadastrar TCC. Tente novamente.');
-        this.loading.set(false);
-      }
-    });
+    this.store.addTcc(payload);
+
+    this.success.set(true);
+
+    this.form.reset({ modality: 'presencial' });
   }
 }

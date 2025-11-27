@@ -42,10 +42,6 @@ export class DashboardTccComponent implements OnInit {
     });
   }
 
-  
-
-
-
   ngOnInit(): void {
     this.store.loadTccs();
   }

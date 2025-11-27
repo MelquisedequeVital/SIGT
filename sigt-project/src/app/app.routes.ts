@@ -3,6 +3,8 @@ import { DashboardTccComponent } from './components/dashboard-tcc/dashboard-tcc.
 import { TccRegistrationComponent } from './components/tcc-registration/tcc-registration.component';
 
 export const routes: Routes = [
+  { path: '', redirectTo: 'agenda-tcc', pathMatch: 'full' },
   { path: 'agenda-tcc', component: DashboardTccComponent, title: 'SIGT'},
+  { path: 'cadastro', component: TccRegistrationComponent, title: 'SIGT | Cadastrar TCC' },
   { path: 'cadastro-tcc', component: TccRegistrationComponent, title: 'SIGT | Cadastrar TCC' },
 ];
