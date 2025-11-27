@@ -1,7 +1,6 @@
-@use "tailwindcss";
 /* src/app/components/dashboard-tcc/dashboard-tcc.component.css */
 :host {
-    --suap-primary: #0A5EA8; /* Azul principal do SUAP */
+    --suap-primary: #0A5EA8; 
     --suap-dark: #084f8f;
     --suap-light-bg: #e8f3fb; 
 }

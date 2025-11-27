@@ -9,16 +9,20 @@ import { TCC } from '../../model/tcc-model';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './dashboard-tcc.component.html',
-  styleUrls: ['./dashboard-tcc.component.css']
+  styleUrls: ['./dashboard-tcc.component.css'],
 })
 export class DashboardTccComponent implements OnInit {
-
   tccs: any;
   loading: any;
   error: any;
 
+  // id selecionado na lista
   selectedTccId = signal<number | null>(null);
 
+  // controle do modal
+  showModal = signal(false);
+
+  // TCC selecionado
   selectedTcc = computed<TCC | null>(() => {
     const list = this.tccs();
     const id = this.selectedTccId();
@@ -26,11 +30,10 @@ export class DashboardTccComponent implements OnInit {
     if (!Array.isArray(list)) return null;
     if (id === null) return null;
 
-    return list.find(t => t.id === id) ?? null;
+    return list.find((t: TCC) => t.id === id) ?? null;
   });
 
   constructor(private store: TccStore) {
-
     this.tccs = this.store.tccList$;
     this.loading = this.store.loading$;
     this.error = this.store.error$;
@@ -48,6 +51,13 @@ export class DashboardTccComponent implements OnInit {
 
   selectTcc(id?: number) {
     this.selectedTccId.set(id ?? null);
+    if (id) {
+      this.showModal.set(true);
+    }
+  }
+
+  closeModal() {
+    this.showModal.set(false);
   }
 
   formatDate(d?: string) {
