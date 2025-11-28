@@ -17,12 +17,12 @@ Este projeto foi desenvolvido como requisito da disciplina **Programação para 
 ## 📸 Telas 
 
 <p align="center">
-  <img src="./telas/imagens/dashboard.png" width="45%">
-  <img src="./telas/imagens/detalhes.png" width="45%">
+  <img src="./telas/dashboard.png.png" width="45%">
+  <img src="./telas/detalhes.png.png" width="45%">
 </p>
 
 <p align="center">
-  <img src="./telas/imagens/cadastro.png" width="70%">
+  <img src="./telas/cadastro.png.png" width="70%">
 </p>
 
 
@@ -63,6 +63,7 @@ Este projeto foi desenvolvido como requisito da disciplina **Programação para 
     </td>
   </tr>
 </table>
+
 
 
 
