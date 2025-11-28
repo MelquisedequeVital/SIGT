@@ -47,30 +47,32 @@ Este projeto foi desenvolvido como requisito da disciplina **Programação para 
 
 
 
+
 ## 👨‍💻 Colaboradores
+
+
+<div align="center">
 
 <table>
   <tr>
     <td align="center">
-      <a href="https://github.com/pedrolucasi">
-        <img src="https://github.com/pedrolucasi.png" width="100px;" alt="Foto Pedro"/><br>
-        <sub><b>pedrolucasi</b></sub>
-      </a>
+      <img src="https://github.com/pedrolucasi.png" width="110" style="border-radius: 50%;" /><br>
+      <sub><b>pedrolucasi</b></sub>
     </td>
     <td align="center">
-      <a href="https://github.com/josejunior07">
-        <img src="https://github.com/josejunior07.png" width="100px;" alt="Foto José"/><br>
-        <sub><b>josejunior07</b></sub>
-      </a>
+      <img src="https://github.com/josejunior07.png" width="110" style="border-radius: 50%;" /><br>
+      <sub><b>josejunior07</b></sub>
     </td>
     <td align="center">
-      <a href="https://github.com/luizalima3">
-        <img src="https://github.com/luizalima3.png" width="100px;" alt="Foto Luiza"/><br>
-        <sub><b>luizalima3</b></sub>
-      </a>
+      <img src="https://github.com/luizalima3.png" width="110" style="border-radius: 50%;" /><br>
+      <sub><b>luizalima3</b></sub>
     </td>
   </tr>
 </table>
+
+</div>
+
+
 
 
 
