@@ -16,11 +16,34 @@ Este projeto foi desenvolvido como requisito da disciplina **Programação para 
 
 ## 🛠️ Tecnologias Utilizadas
 
-![Angular](https://img.shields.io/badge/Angular-red?logo=angular&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178c6?logo=typescript&logoColor=white)
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
-![TailwindCSS](https://img.shields.io/badge/TailwindCSS-38bdf8?logo=tailwindcss&logoColor=white)
-![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white)
+<div align="center">
+
+<table>
+  <tr>
+    <td align="center" width="140">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angular/angular-original.svg" width="65" /><br>
+      <sub><b>Angular</b></sub>
+    </td>
+    <td align="center" width="140">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" width="65" /><br>
+      <sub><b>TypeScript</b></sub>
+    </td>
+    <td align="center" width="140">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" width="65" /><br>
+      <sub><b>HTML5</b></sub>
+    </td>
+    <td align="center" width="140">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" width="65" /><br>
+      <sub><b>TailwindCSS</b></sub>
+    </td>
+    <td align="center" width="140">
+      <img src="https://avatars.githubusercontent.com/u/54469796?s=200&v=4" width="65" /><br>
+      <sub><b>Supabase</b></sub>
+    </td>
+  </tr>
+</table>
+
+</div>
 
 
 
@@ -48,6 +71,7 @@ Este projeto foi desenvolvido como requisito da disciplina **Programação para 
     </td>
   </tr>
 </table>
+
 
 
 
