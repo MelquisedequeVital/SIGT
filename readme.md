@@ -14,19 +14,6 @@ Este projeto foi desenvolvido como requisito da disciplina **Programação para 
 - 🔍 **Listagem e seleção de TCCs**
 
 
-## 📸 Telas 
-
-<p align="center">
-  <img src="./telas/dashboard.png.png" width="45%">
-  <img src="./telas/detalhes.png.png" width="45%">
-</p>
-
-<p align="center">
-  <img src="./telas/cadastro.png.png" width="70%">
-</p>
-
-
-
 ## 🛠️ Tecnologias Utilizadas
 
 ![Angular](https://img.shields.io/badge/Angular-red?logo=angular&logoColor=white)
@@ -63,6 +50,7 @@ Este projeto foi desenvolvido como requisito da disciplina **Programação para 
     </td>
   </tr>
 </table>
+
 
 
 
