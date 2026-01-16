@@ -31,12 +31,19 @@ export class TccRegistrationComponent {
     this.minDate = tomorrow.toISOString().split('T')[0];
 
     this.form = this.fb.group({
-      studentName: ['', Validators.required],
+      studentName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/), // sanitização com  Regex
+        ],
+      ],
       studentId: [
         '',
         [
           Validators.required,
-          Validators.pattern('^[0-9]{5,11}$'), 
+          Validators.pattern('^[0-9]{5,11}$'),
         ],
       ],
       advisorName: ['', Validators.required],
@@ -59,8 +66,22 @@ export class TccRegistrationComponent {
     });
   }
 
+  
+  onNameInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const sanitizedValue = input.value.replace(
+      /[^A-Za-zÀ-ÖØ-öø-ÿ\s'-]/g,
+      ''
+    );
+
+    input.value = sanitizedValue;
+    this.form
+      .get('studentName')
+      ?.setValue(sanitizedValue, { emitEvent: false });
+  }
+
   private isFutureDate(d?: string): boolean {
-    if (!d) return true; 
+    if (!d) return true;
     const selected = new Date(d);
     const today = new Date();
 
@@ -85,7 +106,7 @@ export class TccRegistrationComponent {
     }
 
     const payload: TCC = {
-      studentName: value.studentName!,
+      studentName: value.studentName!.trim(),
       studentId: value.studentId!,
       advisorName: value.advisorName!,
       title: value.title!,
@@ -107,3 +128,4 @@ export class TccRegistrationComponent {
     this.form.reset({ modality: 'presencial' });
   }
 }
+
