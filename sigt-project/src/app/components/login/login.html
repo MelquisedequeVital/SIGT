@@ -52,9 +52,19 @@
           </div>
 
           <!-- Botão do formulário -->
-          <button
+          <!-- <button
+            type="submit"
             class="bg-sigt-primary text-white w-full rounded-lg py-3.5 font-medium shadow-sm hover:brightness-110 active:brightness-95 transition flex justify-center items-center"
             [disabled]="isSubmitting || form.invalid"
+          >
+            <span *ngIf="!isSubmitting">Entrar</span>
+            <span *ngIf="isSubmitting">Entrando...</span>
+          </button> -->
+
+          <button
+            type="submit"
+            class="bg-[#0A5EA8] text-white w-full rounded-lg py-3.5 font-medium shadow-sm hover:brightness-110 active:brightness-95 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            [disabled]="false"
           >
             <span *ngIf="!isSubmitting">Entrar</span>
             <span *ngIf="isSubmitting">Entrando...</span>
