@@ -8,39 +8,34 @@ import { TCC } from '../model/tcc-model';
 })
 export class TccService {
 
-  private supabaseUrl = 'https://lsjvgwtnzcqydrqbgquw.supabase.co/rest/v1';
-  private apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxzanZnd3RuemNxeWRycWJncXV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQwOTYwMDcsImV4cCI6MjA3OTY3MjAwN30.77q8_OfEm1o-KRKTYZyx0StvIkeLM1FKbbF4eQ6qRC4';
+  // 1. Altere esta linha para o endereço do seu Java
+  private apiUrl = 'http://localhost:8080/api/tccs';
 
-
+  // 2. Você pode apagar a linha da apiKey e do supabaseUrl antigos
+  
+  // 3. Simplifique os headers (o Java geralmente não precisa de apikey)
   private headers = new HttpHeaders({
-    apikey: this.apiKey,
-    Authorization: `Bearer ${this.apiKey}`,
     'Content-Type': 'application/json'
   });
 
   constructor(private http: HttpClient) {}
 
   getTccs(): Observable<TCC[]> {
-    return this.http.get<TCC[]>(`${this.supabaseUrl}/tccs?select=*`, {
-      headers: this.headers
-    });
+    // Agora o link é limpo: http://localhost:8080/api/tccs
+    return this.http.get<TCC[]>(this.apiUrl, { headers: this.headers });
   }
 
   createTcc(data: TCC): Observable<any> {
-    return this.http.post(`${this.supabaseUrl}/tccs`, data, {
-      headers: this.headers
-    });
+    // Envia o TCC para o @PostMapping do seu TccController
+    return this.http.post(this.apiUrl, data, { headers: this.headers });
   }
 
   updateTcc(id: number, data: Partial<TCC>): Observable<any> {
-    return this.http.patch(`${this.supabaseUrl}/tccs?id=eq.${id}`, data, {
-      headers: this.headers
-    });
+    // No Java, caminhos com ID geralmente são: api/tccs/1
+    return this.http.patch(`${this.apiUrl}/${id}`, data, { headers: this.headers });
   }
 
   deleteTcc(id: number): Observable<any> {
-    return this.http.delete(`${this.supabaseUrl}/tccs?id=eq.${id}`, {
-      headers: this.headers
-    });
+    return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.headers });
   }
 }
