@@ -11,6 +11,7 @@ export class TccService {
   private supabaseUrl = 'https://lsjvgwtnzcqydrqbgquw.supabase.co/rest/v1';
   private apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxzanZnd3RuemNxeWRycWJncXV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQwOTYwMDcsImV4cCI6MjA3OTY3MjAwN30.77q8_OfEm1o-KRKTYZyx0StvIkeLM1FKbbF4eQ6qRC4';
 
+
   private headers = new HttpHeaders({
     apikey: this.apiKey,
     Authorization: `Bearer ${this.apiKey}`,
