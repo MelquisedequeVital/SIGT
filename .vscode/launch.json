@@ -11,7 +11,7 @@
             "mainClass": "br.edu.ifpb.sigt_backend.SigtBackendApplication",
             "projectName": "sigt-backend",
             "env": {
-                "DB_PASSWORD": "euvoupassar?"
+                "DB_PASSWORD": ""
             }
         },
         {
