@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TccStore } from '../../store/tcc-store';
 import { TCC } from '../../model/tcc-model';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-dashboard-tcc',
@@ -33,7 +34,7 @@ export class DashboardTccComponent implements OnInit {
     return list.find((t: TCC) => t.id === id) ?? null;
   });
 
-  constructor(private store: TccStore) {
+  constructor(private store: TccStore, private sanitizer: DomSanitizer) {
     this.tccs = this.store.tccList$;
     this.loading = this.store.loading$;
     this.error = this.store.error$;
@@ -67,5 +68,9 @@ export class DashboardTccComponent implements OnInit {
     } catch {
       return d;
     }
+  }
+
+  getSafeHtml(htmlPuro: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(htmlPuro);
   }
 }
