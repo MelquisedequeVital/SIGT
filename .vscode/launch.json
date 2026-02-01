@@ -9,7 +9,10 @@
             "name": "SigtBackendApplication",
             "request": "launch",
             "mainClass": "br.edu.ifpb.sigt_backend.SigtBackendApplication",
-            "projectName": "sigt-backend"
+            "projectName": "sigt-backend",
+            "env": {
+                "DB_PASSWORD": "euvoupassar?"
+            }
         },
         {
             "type": "chrome",
@@ -18,5 +21,5 @@
             "url": "http://localhost:8080",
             "webRoot": "${workspaceFolder}"
         }
-    ]
+    ],
 }
