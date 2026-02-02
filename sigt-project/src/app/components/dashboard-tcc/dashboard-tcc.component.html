@@ -2,11 +2,9 @@
   <div class="max-w-6xl mx-auto">
     <h3 class="text-xl font-semibold text-suap mb-3">SIGT - Sistema Gerenciador de TCC</h3>
 
-    <a
-      routerLink="/cadastro"
+    <a routerLink="/cadastro"
       class="block w-full text-center text-white px-4 py-2 rounded-md shadow-sm hover:shadow transition"
-      style="background-color: #0A5EA8;"
-    >
+      style="background-color: #0A5EA8;">
       + Cadastrar Novo TCC
     </a>
 
@@ -15,13 +13,9 @@
       <div class="text-sm text-red-600 mb-2" *ngIf="error()">{{ error() }}</div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div
-          *ngFor="let item of tccs()"
-          class="p-4 border rounded-lg bg-white hover:shadow-md hover:border-suap
+        <div *ngFor="let item of tccs()" class="p-4 border rounded-lg bg-white hover:shadow-md hover:border-suap
                  transition cursor-pointer flex flex-col justify-between"
-          [ngClass]="{ 'bg-suap-light border-suap': item.id === selectedTccId() }"
-          (click)="selectTcc(item.id)"
-        >
+          [ngClass]="{ 'bg-suap-light border-suap': item.id === selectedTccId() }" (click)="selectTcc(item.id)">
           <div>
             <div class="font-semibold text-gray-800 mb-1">
               {{ item.title }}
@@ -35,120 +29,116 @@
           </div>
 
           <div class="mt-3 flex items-center justify-between text-xs">
-            <span
-              class="px-2 py-0.5 rounded-full text-white font-semibold"
-              [ngClass]="{
+            <span class="px-2 py-0.5 rounded-full text-white font-semibold" [ngClass]="{
                 'bg-green-600': item.status === 'finalizado',
                 'bg-blue-600': item.status === 'marcada',
                 'bg-yellow-600': item.status === 'cadastrada'
-              }"
-            >
+              }">
               {{ item.status | uppercase }}
             </span>
             <span class="text-gray-400">
               #{{ item.id }}
             </span>
+            <div class="flex gap-2">
+              <button (click)="$event.stopPropagation(); editTcc(item)" class="text-blue-600 hover:text-blue-800">
+                ✏️
+              </button>
+              <button (click)="$event.stopPropagation(); deleteTcc(item.id)" class="text-red-600 hover:text-red-800">
+                🗑️
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div
-        *ngIf="tccs().length === 0 && !loading()"
-        class="text-gray-500 text-sm mt-4 text-center"
-      >
-        Nenhum TCC agendado.
+        <div *ngIf="tccs().length === 0 && !loading()" class="text-gray-500 text-sm mt-4 text-center">
+          Nenhum TCC agendado.
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div
-  *ngIf="showModal() && selectedTcc()"
-  class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
->
-  <div class="bg-white rounded-lg shadow-lg max-w-xl w-full p-6">
-    <div class="flex items-center justify-between mb-4">
-      <h3 class="text-xl font-semibold text-suap">
-        Detalhes do TCC
-      </h3>
-      <button
-        (click)="closeModal()"
-        class="text-gray-500 hover:text-gray-700 text-xl leading-none"
-      >
-        ×
-      </button>
-    </div>
-
-    <h4 class="font-bold text-lg text-suap">
-      {{ selectedTcc()?.title }}
-    </h4>
-
-    <div class="text-sm text-gray-700 mt-3 space-y-1">
-      <div>
-        <span class="font-medium">Orientando:</span>
-        {{ selectedTcc()?.studentName }}
-      </div>
-      <div>
-        <span class="font-medium">Matrícula:</span>
-        {{ selectedTcc()?.studentId }}
-      </div>
-      <div>
-        <span class="font-medium">Orientador:</span>
-        {{ selectedTcc()?.advisorName }}
+  <div *ngIf="showModal() && selectedTcc()" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div class="bg-white rounded-lg shadow-lg max-w-xl w-full p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xl font-semibold text-suap">
+          Detalhes do TCC
+        </h3>
+        <button (click)="closeModal()" class="text-gray-500 hover:text-gray-700 text-xl leading-none">
+          ×
+        </button>
       </div>
 
-      <div class="mt-2">
-        <span class="font-medium">Status:</span>
-        <span
-          class="ml-1 text-white text-xs font-bold px-2 py-1 rounded"
-          [ngClass]="{
+      <h4 class="font-bold text-lg text-suap">
+        {{ selectedTcc()?.title }}
+      </h4>
+
+      <div class="text-sm text-gray-700 mt-3 space-y-1">
+        <div>
+          <span class="font-medium">Orientando:</span>
+          {{ selectedTcc()?.studentName }}
+        </div>
+        <div>
+          <span class="font-medium">Matrícula:</span>
+          {{ selectedTcc()?.studentId }}
+        </div>
+        <div>
+          <span class="font-medium">Orientador:</span>
+          {{ selectedTcc()?.advisorName }}
+        </div>
+
+        <div class="mt-2">
+          <span class="font-medium">Status:</span>
+          <span class="ml-1 text-white text-xs font-bold px-2 py-1 rounded" [ngClass]="{
             'bg-green-600': selectedTcc()?.status === 'finalizado',
             'bg-blue-600': selectedTcc()?.status === 'marcada',
             'bg-yellow-600': selectedTcc()?.status === 'cadastrada'
-          }"
-        >
-          {{ selectedTcc()?.status | uppercase }}
-        </span>
+          }">
+            {{ selectedTcc()?.status | uppercase }}
+          </span>
+        </div>
+
+        <div>
+          <span class="font-medium">Modalidade:</span>
+          {{ selectedTcc()?.modality || '-' }}
+        </div>
+        <div>
+          <span class="font-medium">Data/Hora:</span>
+          {{ formatDate(selectedTcc()?.scheduledDate) }}
+          {{ selectedTcc()?.scheduledTime || '-' }}
+        </div>
+
+        <div class="mt-4">
+          <span class="font-medium">Resumo:</span>
+          <p class="text-sm italic">
+            {{ selectedTcc()?.summary || 'N/A' }}
+          </p>
+        </div>
+
+        <div class="mt-4">
+          <span class="font-medium">Banca:</span>
+          <p class="text-sm">
+            {{ selectedTcc()?.committee?.join(', ') || 'Não definida' }}
+          </p>
+        </div>
       </div>
 
-      <div>
-        <span class="font-medium">Modalidade:</span>
-        {{ selectedTcc()?.modality || '-' }}
-      </div>
-      <div>
-        <span class="font-medium">Data/Hora:</span>
-        {{ formatDate(selectedTcc()?.scheduledDate) }}
-        {{ selectedTcc()?.scheduledTime || '-' }}
-      </div>
+      <div class="mt-6 flex justify-end gap-2">
+        <button (click)="deleteTcc(selectedTcc()!.id!)"
+          class="px-3 py-1 text-sm rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700">
+          Excluir Agendamento
+        </button>
 
-      <div class="mt-4">
-        <span class="font-medium">Resumo:</span>
-        <p class="text-sm italic">
-          {{ selectedTcc()?.summary || 'N/A' }}
-        </p>
+        <button (click)="editTcc(selectedTcc()!)"
+          class="px-3 py-1 text-sm rounded-md shadow-sm text-white bg-yellow-600 hover:bg-yellow-700">
+          Editar Dados
+        </button>
+        <button class="px-3 py-1 text-sm rounded-md shadow-sm text-white" style="background-color: #0A5EA8;">
+          Gerar Ata
+        </button>
+        <button (click)="closeModal()"
+          class="px-3 py-1 text-sm rounded border border-gray-300 text-gray-700 hover:bg-gray-100">
+          Fechar
+        </button>
       </div>
-
-      <div class="mt-4">
-        <span class="font-medium">Banca:</span>
-        <p class="text-sm">
-          {{ selectedTcc()?.committee?.join(', ') || 'Não definida' }}
-        </p>
-      </div>
-    </div>
-
-    <div class="mt-6 flex justify-end gap-2">
-      <button
-        class="px-3 py-1 text-sm rounded-md shadow-sm text-white"
-        style="background-color: #0A5EA8;"
-      >
-        Gerar Ata
-      </button>
-      <button
-        (click)="closeModal()"
-        class="px-3 py-1 text-sm rounded border border-gray-300 text-gray-700 hover:bg-gray-100"
-      >
-        Fechar
-      </button>
     </div>
   </div>
-</div>

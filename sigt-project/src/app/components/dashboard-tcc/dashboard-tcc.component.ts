@@ -1,9 +1,10 @@
 import { Component, computed, effect, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { TccStore } from '../../store/tcc-store';
 import { TCC } from '../../model/tcc-model';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-dashboard-tcc',
@@ -34,10 +35,12 @@ export class DashboardTccComponent implements OnInit {
     return list.find((t: TCC) => t.id === id) ?? null;
   });
 
-  constructor(private store: TccStore, private sanitizer: DomSanitizer) {
+  constructor(private store: TccStore, private sanitizer: DomSanitizer, private router: Router) {
     this.tccs = this.store.tccList$;
     this.loading = this.store.loading$;
     this.error = this.store.error$;
+
+    
 
     effect(() => {
       if (this.error()) {
@@ -55,6 +58,19 @@ export class DashboardTccComponent implements OnInit {
     if (id) {
       this.showModal.set(true);
     }
+  }
+
+  deleteTcc(id: number) {
+    if (confirm('Deseja realmente excluir este agendamento? Esta ação não pode ser desfeita.')) {
+      this.store.removeTcc(id); // Chama o método de delete da sua Store
+      this.closeModal(); // Fecha o modal caso esteja aberto
+    }
+  }
+
+  editTcc(tcc: any) {
+    // Redireciona para a página de cadastro passando o ID para edição
+    // Certifique-se de que sua rota /cadastro aceite o ID (ex: /cadastro/:id)
+    this.router.navigate(['/cadastro'], { queryParams: { id: tcc.id } });
   }
 
   closeModal() {

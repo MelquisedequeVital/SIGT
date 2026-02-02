@@ -12,13 +12,13 @@ export class TccService {
   private apiUrl = 'http://localhost:8080/api/tccs';
 
   // 2. Você pode apagar a linha da apiKey e do supabaseUrl antigos
-  
+
   // 3. Simplifique os headers (o Java geralmente não precisa de apikey)
   private headers = new HttpHeaders({
     'Content-Type': 'application/json'
   });
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getTccs(): Observable<TCC[]> {
     // Agora o link é limpo: http://localhost:8080/api/tccs
@@ -30,12 +30,11 @@ export class TccService {
     return this.http.post(this.apiUrl, data, { headers: this.headers });
   }
 
-  updateTcc(id: number, data: Partial<TCC>): Observable<any> {
-    // No Java, caminhos com ID geralmente são: api/tccs/1
-    return this.http.patch(`${this.apiUrl}/${id}`, data, { headers: this.headers });
+  updateTcc(id: number, tcc: TCC): Observable<TCC> {
+    return this.http.put<TCC>(`${this.apiUrl}/${id}`, tcc);
   }
 
   deleteTcc(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.headers });
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

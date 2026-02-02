@@ -1,6 +1,7 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { TccService } from '../service/tcc-service';
 import { TCC } from '../model/tcc-model';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,7 @@ export class TccStore {
   loading$ = computed(() => this.loading());
   error$ = computed(() => this.error());
 
-  constructor(private tccService: TccService) {}
+  constructor(private tccService: TccService, private router: Router) { }
 
   loadTccs() {
     this.loading.set(true);
@@ -40,11 +41,27 @@ export class TccStore {
   }
 
   updateTcc(id: number, tcc: TCC) {
+    this.loading.set(true);
+    this.error.set(null); // Limpa erros anteriores antes de começar
+
     this.tccService.updateTcc(id, tcc).subscribe({
-      next: () => this.loadTccs(),
-      error: () => this.error.set('Erro ao atualizar TCC'),
+      next: () => {
+        // SÓ ENTRA AQUI SE O JAVA RESPONDER 200 OK
+        this.loadTccs();
+        this.loading.set(false);
+        // Redireciona direto para o dashboard após o sucesso
+        this.router.navigate(['/agenda-tcc']);
+      },
+      error: (err) => {
+        // SE DER ERRO NO JAVA (400, 404, 500), ENTRA AQUI
+        console.error('Erro detalhado do servidor:', err);
+        this.error.set('Erro ao atualizar TCC. Verifique os campos.');
+        this.loading.set(false);
+      },
     });
   }
+
+
 
   removeTcc(id: number) {
     this.tccService.deleteTcc(id).subscribe({
