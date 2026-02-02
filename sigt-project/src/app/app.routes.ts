@@ -3,6 +3,7 @@ import { DashboardTccComponent } from './components/dashboard-tcc/dashboard-tcc.
 import { TccRegistrationComponent } from './components/tcc-registration/tcc-registration.component';
 import { LoginComponent } from './components/login/login';
 import { RegisterComponent } from './components/register/register';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   // Mude o redirecionamento para 'login'
@@ -12,6 +13,7 @@ export const routes: Routes = [
     path: 'agenda-tcc',
     component: DashboardTccComponent,
     title: 'SIGT - Sistema Gerenciador de TCC',
+    canActivate: [authGuard], // ESTA ROTA AGORA ESTÁ PROTEGIDA
   },
   { path: 'cadastro', component: TccRegistrationComponent, title: 'SIGT | Cadastrar TCC' },
  { path: 'login', component: LoginComponent, title: 'SIGT | Login' },

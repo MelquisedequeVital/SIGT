@@ -40,7 +40,7 @@ export class DashboardTccComponent implements OnInit {
     this.loading = this.store.loading$;
     this.error = this.store.error$;
 
-    
+
 
     effect(() => {
       if (this.error()) {
@@ -71,6 +71,11 @@ export class DashboardTccComponent implements OnInit {
     // Redireciona para a página de cadastro passando o ID para edição
     // Certifique-se de que sua rota /cadastro aceite o ID (ex: /cadastro/:id)
     this.router.navigate(['/cadastro'], { queryParams: { id: tcc.id } });
+  }
+  
+  logout() {
+    localStorage.removeItem('token'); // Remove a credencial
+    this.router.navigate(['/login']); // Redireciona para o login
   }
 
   closeModal() {
