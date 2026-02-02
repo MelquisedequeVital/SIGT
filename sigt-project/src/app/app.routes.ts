@@ -4,13 +4,14 @@ import { TccRegistrationComponent } from './components/tcc-registration/tcc-regi
 import { LoginComponent } from './components/login/login';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'agenda-tcc', pathMatch: 'full' },
+  // Mude o redirecionamento para 'login'
+  { path: '', redirectTo: 'login', pathMatch: 'full' }, 
+  
   {
     path: 'agenda-tcc',
     component: DashboardTccComponent,
     title: 'SIGT - Sistema Gerenciador de TCC',
   },
   { path: 'cadastro', component: TccRegistrationComponent, title: 'SIGT | Cadastrar TCC' },
-  { path: 'cadastro-tcc', component: TccRegistrationComponent, title: 'SIGT | Cadastrar TCC' },
   { path: 'login', component: LoginComponent, title: 'SIGT | Login' },
 ];
