@@ -1,11 +1,12 @@
 package br.edu.ifpb.sigt_backend.service;
 
-import br.edu.ifpb.sigt_backend.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import br.edu.ifpb.sigt_backend.repository.UsuarioRepository;
 
 @Service
 public class AutenticacaoService implements UserDetailsService {
@@ -15,7 +16,14 @@ public class AutenticacaoService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // O Spring chama este método automaticamente durante o login
-        return repository.findByLogin(username);
+        // Altere 'findByLogin' para 'findByMatricula'
+        // O parâmetro 'username' aqui conterá o que o usuário digitou no campo matrícula
+        UserDetails usuario = repository.findByMatricula(username);
+        
+        if (usuario == null) {
+            throw new UsernameNotFoundException("Usuário não encontrado com a matrícula: " + username);
+        }
+        
+        return usuario;
     }
 }

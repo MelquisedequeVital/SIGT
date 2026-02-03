@@ -18,7 +18,7 @@ export class RegisterComponent {
   isSubmitting = false;
 
   form = this.fb.group({
-    login: ['', [Validators.required, Validators.minLength(3)]],
+    matricula: ['', [Validators.required, Validators.minLength(5), Validators.pattern(/^[0-9]+$/)]],
     senha: ['', [Validators.required, Validators.minLength(6)]],
   });
 
@@ -47,7 +47,7 @@ export class RegisterComponent {
   }
 
   // Ajustado para aceitar 'senha' conforme o formGroup
-  fieldInvalid(name: 'login' | 'senha'): boolean {
+  fieldInvalid(name: 'matricula' | 'senha'): boolean {
     const c = this.form.get(name);
     return !!c && c.touched && c.invalid;
   }

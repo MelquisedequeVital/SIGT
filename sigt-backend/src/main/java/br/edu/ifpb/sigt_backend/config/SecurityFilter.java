@@ -1,18 +1,19 @@
 package br.edu.ifpb.sigt_backend.config;
 
-import br.edu.ifpb.sigt_backend.repository.UsuarioRepository;
-import br.edu.ifpb.sigt_backend.service.TokenService;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
+import br.edu.ifpb.sigt_backend.repository.UsuarioRepository;
+import br.edu.ifpb.sigt_backend.service.TokenService;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
@@ -31,7 +32,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         
         if (token != null) {
             var login = tokenService.getSubject(token);
-            var usuario = repository.findByLogin(login);
+            var usuario = repository.findByMatricula(login);
 
             // Autentica o utilizador no contexto do Spring
             var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());

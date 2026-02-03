@@ -1,13 +1,22 @@
 package br.edu.ifpb.sigt_backend.model;
 
-import jakarta.persistence.*;
-import lombok.*;
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "usuarios")
@@ -21,8 +30,8 @@ public class Usuario implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String login;
+    @Column(name = "student_id", unique=true, nullable=false) // Faz a ponte entre Java e Supabase
+    private String matricula;
 
     @Column(nullable = false)
     private String senha;
@@ -42,7 +51,7 @@ public class Usuario implements UserDetails {
 
     @Override
     public String getUsername() {
-        return login;
+        return this.matricula;
     }
 
     // Métodos obrigatórios da interface UserDetails

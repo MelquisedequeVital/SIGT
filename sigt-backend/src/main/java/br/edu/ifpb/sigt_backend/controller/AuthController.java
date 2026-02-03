@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder; // Import necessário
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,37 +24,38 @@ public class AuthController {
     private UsuarioRepository repository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder; // Para criptografar a senha
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
     public ResponseEntity efetuarLogin(@RequestBody DadosAutenticacao dados) {
-        var authenticationToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
+        // Usa a matrícula como o principal identificador no Spring Security
+        var authenticationToken = new UsernamePasswordAuthenticationToken(dados.matricula(), dados.senha());
         var authentication = manager.authenticate(authenticationToken);
+        
         var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
-
         return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
     }
 
-    // NOVO MÉTODO PARA CRIAR USUÁRIOS
     @PostMapping("/register")
     public ResponseEntity registrar(@RequestBody DadosAutenticacao dados) {
-        if (repository.findByLogin(dados.login()) != null) {
-            return ResponseEntity.badRequest().body("Usuário já existe");
+        // Verifica se a matrícula (student_id) já existe no Supabase
+        if (repository.findByMatricula(dados.matricula()) != null) {
+            return ResponseEntity.badRequest().body("Usuário com esta matrícula já existe");
         }
 
-        // Criptografa a senha antes de salvar no banco
         String senhaCriptografada = passwordEncoder.encode(dados.senha());
         
         Usuario novoUsuario = new Usuario();
-        novoUsuario.setLogin(dados.login());
+        // Mapeia para a coluna student_id da entidade
+        novoUsuario.setMatricula(dados.matricula()); 
         novoUsuario.setSenha(senhaCriptografada);
-        novoUsuario.setRole("ROLE_USER"); // Define uma role padrão
+        novoUsuario.setRole("ROLE_USER");
 
         repository.save(novoUsuario);
-
         return ResponseEntity.ok("Usuário cadastrado com sucesso!");
     }
 }
 
-record DadosAutenticacao(String login, String senha) {}
+// Mova os Records para fora da classe AuthController, mas no mesmo arquivo
+record DadosAutenticacao(String senha, String matricula) {}
 record DadosTokenJWT(String token) {}

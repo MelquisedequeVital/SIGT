@@ -7,14 +7,15 @@ import { tap } from 'rxjs';
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private readonly API = 'http://localhost:8080/auth/login';
+  private readonly API = 'http://localhost:8080/auth';
 
-  login(dados: any) {
-    return this.http.post<{token: string}>(this.API, dados).pipe(
-      tap(res => {
-        // Guarda o token JWT no navegador
-        localStorage.setItem('token', res.token);
-      })
+  login(dados: { matricula: string; senha: string }) {
+    return this.http.post<{ token: string }>(`${this.API}/login`, dados).pipe(
+      tap(res => localStorage.setItem('token', res.token))
     );
+  }
+
+  register(dados: { matricula: string; senha: string }) {
+    return this.http.post(`${this.API}/register`, dados);
   }
 }

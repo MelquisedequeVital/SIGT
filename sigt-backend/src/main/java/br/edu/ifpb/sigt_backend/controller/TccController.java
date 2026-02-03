@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifpb.sigt_backend.model.Tcc;
+import br.edu.ifpb.sigt_backend.model.Usuario;
 import br.edu.ifpb.sigt_backend.repository.TccRepository;
 import jakarta.validation.Valid;
 
@@ -33,8 +35,11 @@ public class TccController {
     }
 
     @GetMapping
-    public List<Tcc> listarTodos() {
-        return repository.findAll();
+    public ResponseEntity<List<Tcc>> listarMeusTccs(@AuthenticationPrincipal Usuario logado) {
+        // O @AuthenticationPrincipal pega o usuário do token automaticamente
+        // Supondo que o 'login' do seu usuário seja a matrícula
+        List<Tcc> tccs = repository.findByStudentId(logado.getUsername());
+        return ResponseEntity.ok(tccs);
     }
 
     @PutMapping("/{id}")
@@ -49,6 +54,7 @@ public class TccController {
             tccExistente.setScheduledDate(tccAtualizado.getScheduledDate());
             tccExistente.setScheduledTime(tccAtualizado.getScheduledTime());
             tccExistente.setLocation(tccAtualizado.getLocation());
+            tccExistente.setStudentId(tccAtualizado.getStudentId());
 
             // 2. O SEGREDO DA BANCA: Não use tccExistente.setCommittee(tccAtualizado.getCommittee())
             // Limpe a lista existente e adicione a nova para o Hibernate não se perder nos IDs

@@ -18,8 +18,8 @@ export class LoginComponent {
   isSubmitting = false;
 
   // Alterado para coincidir com o Backend Java
-  form = this.fb.group({
-    login: ['', [Validators.required]],
+  form = this.fb.nonNullable.group({
+    matricula: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
     senha: ['', [Validators.required, Validators.minLength(6)]],
   });
 
@@ -31,7 +31,9 @@ export class LoginComponent {
 
     this.isSubmitting = true;
 
-    this.authService.login(this.form.value).subscribe({
+    const dados = this.form.getRawValue();
+
+    this.authService.login(dados as { matricula: string; senha: string }).subscribe({
       next: () => {
         this.isSubmitting = false;
         this.router.navigate(['/agenda-tcc']); // Redireciona após o login
