@@ -1,7 +1,5 @@
 package br.edu.ifpb.sigt_backend.config;
 
-
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +13,18 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain; // IMPORT ESSENCIAL
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     @Autowired
-    private SecurityFilter securityFilter; // ESSA LINHA CONECTA AS DUAS CLASSES
+    private SecurityFilter securityFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -36,9 +35,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                 .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                .anyRequest().authenticated() // Bloqueia tudo o que não for login/register
+                .anyRequest().authenticated()
                 )
-                // ADICIONA O FILTRO JWT ANTES DO FILTRO DE SENHA PADRÃO
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
@@ -63,11 +61,15 @@ public class SecurityConfig {
         // Libera os métodos HTTP necessários para o CRUD do SIGT
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
-        // Libera os Headers para o Token JWT e JSON
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        // Ajuste nos Headers: Com cookies, o header "Authorization" torna-se opcional, 
+        // mas mantemos para compatibilidade se necessário.
+        configuration.setAllowedHeaders(List.of("Content-Type", "Authorization", "Accept"));
 
-        // Permite que o navegador envie o Token
+        // ESSENCIAL PARA REQUISITO 4: Permite que o navegador envie/receba cookies HttpOnly
         configuration.setAllowCredentials(true);
+
+        // Expõe o header Set-Cookie para que o navegador processe a gravação do token
+        configuration.setExposedHeaders(List.of("Set-Cookie"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
