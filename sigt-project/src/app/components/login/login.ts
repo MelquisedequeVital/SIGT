@@ -17,6 +17,8 @@ export class LoginComponent {
 
   isSubmitting = false;
 
+  showPassword = false;
+
   // Alterado para coincidir com o Backend Java
   form = this.fb.nonNullable.group({
     matricula: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
@@ -50,4 +52,8 @@ export class LoginComponent {
     const c = this.form.get(name);
     return !!c && c.touched && c.invalid;
   }
+
+  togglePassword() {
+  this.showPassword = !this.showPassword;
+}
 }

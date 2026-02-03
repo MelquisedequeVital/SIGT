@@ -20,13 +20,37 @@
             </p>
           </div>
 
-          <div>
-            <label class="block text-sm font-medium text-sigt-text/90"> Senha </label>
-            <input type="password" formControlName="senha" placeholder="Crie uma senha segura"
-              class="mt-2 w-full rounded-lg border px-4 py-3 outline-none focus:ring-2 focus:ring-sigt-primary/30 focus:border-sigt-primary transition"
-              [class.border-red-400]="fieldInvalid('senha')" />
+          <div class="mt-4">
+            <label class="block text-sm font-medium text-sigt-text/90">Senha</label>
+            
+            <div class="relative mt-2">
+              <input [type]="showPassword ? 'text' : 'password'" 
+                formControlName="senha" 
+                (input)="checkStrength()" 
+                placeholder="Mínimo 8 caracteres"
+                class="w-full rounded-lg border px-4 py-3 pr-12 outline-none focus:ring-2 focus:ring-sigt-primary/30 transition"
+                [class.border-red-400]="fieldInvalid('senha')" />
+              
+              <button type="button" (click)="togglePassword()"
+                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-sigt-primary transition-colors focus:outline-none">
+                <span *ngIf="!showPassword" class="text-lg">👁️‍🗨️</span>
+                <span *ngIf="showPassword" class="text-lg">👁️</span>
+              </button>
+            </div>
+
+            <div class="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-gray-200">
+              <div class="h-full transition-all duration-500" [style.width.%]="passwordStrength" [ngClass]="{
+                'bg-red-500': passwordStrength <= 25,
+                'bg-yellow-500': passwordStrength > 25 && passwordStrength <= 75,
+                'bg-green-500': passwordStrength > 75
+              }"></div>
+            </div>
+
+            <p class="mt-1 text-[10px] text-gray-500 italic">
+              Dica: Use letras maiúsculas, números e símbolos para uma senha forte.
+            </p>
             <p *ngIf="fieldInvalid('senha')" class="mt-1 text-sm text-red-600">
-              A senha deve ter pelo menos 6 caracteres.
+              A senha não atende aos requisitos de segurança.
             </p>
           </div>
 
