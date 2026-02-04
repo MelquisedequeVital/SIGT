@@ -54,6 +54,10 @@ public class Usuario implements UserDetails {
         return this.matricula;
     }
 
+    public void setMatricula(String matricula) {
+    this.matricula = matricula;
+}
+
     // Métodos obrigatórios da interface UserDetails
     @Override public boolean isAccountNonExpired() { return true; }
     @Override public boolean isAccountNonLocked() { return true; }
