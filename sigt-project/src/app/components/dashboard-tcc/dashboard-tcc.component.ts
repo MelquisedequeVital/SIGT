@@ -1,10 +1,10 @@
-import { Component, computed, effect, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { TccStore } from '../../store/tcc-store';
 import { TCC } from '../../model/tcc-model';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-
+import { AuthService } from '../../service/auth.service'; // Importação do serviço de autenticação
 
 @Component({
   selector: 'app-dashboard-tcc',
@@ -24,6 +24,9 @@ export class DashboardTccComponent implements OnInit {
   // controle do modal
   showModal = signal(false);
 
+  // Injeção do AuthService para gerenciar o encerramento de sessão seguro (Req 4)
+  private authService = inject(AuthService);
+
   // TCC selecionado
   selectedTcc = computed<TCC | null>(() => {
     const list = this.tccs();
@@ -35,12 +38,14 @@ export class DashboardTccComponent implements OnInit {
     return list.find((t: TCC) => t.id === id) ?? null;
   });
 
-  constructor(private store: TccStore, private sanitizer: DomSanitizer, private router: Router) {
+  constructor(
+    private store: TccStore, 
+    private sanitizer: DomSanitizer, 
+    private router: Router
+  ) {
     this.tccs = this.store.tccList$;
     this.loading = this.store.loading$;
     this.error = this.store.error$;
-
-
 
     effect(() => {
       if (this.error()) {
@@ -62,20 +67,22 @@ export class DashboardTccComponent implements OnInit {
 
   deleteTcc(id: number) {
     if (confirm('Deseja realmente excluir este agendamento? Esta ação não pode ser desfeita.')) {
-      this.store.removeTcc(id); // Chama o método de delete da sua Store
-      this.closeModal(); // Fecha o modal caso esteja aberto
+      this.store.removeTcc(id);
+      this.closeModal();
     }
   }
 
   editTcc(tcc: any) {
-    // Redireciona para a página de cadastro passando o ID para edição
-    // Certifique-se de que sua rota /cadastro aceite o ID (ex: /cadastro/:id)
     this.router.navigate(['/cadastro'], { queryParams: { id: tcc.id } });
   }
   
+  /**
+   * Realiza o logout chamando o AuthService.
+   * Isso garante que o servidor Java receba a ordem para limpar o Cookie HttpOnly.
+   */
   logout() {
-    localStorage.removeItem('token'); // Remove a credencial
-    this.router.navigate(['/login']); // Redireciona para o login
+    // Agora o logout segue o fluxo de segurança do Requisito 4
+    this.authService.logout(); 
   }
 
   closeModal() {

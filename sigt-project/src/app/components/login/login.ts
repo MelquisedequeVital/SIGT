@@ -17,12 +17,15 @@ export class LoginComponent {
 
   isSubmitting = false;
 
+  showPassword = false;
+
   // Alterado para coincidir com o Backend Java
   form = this.fb.nonNullable.group({
     matricula: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
     senha: ['', [Validators.required, Validators.minLength(6)]],
   });
 
+  // No seu login.ts
   submit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -30,17 +33,19 @@ export class LoginComponent {
     }
 
     this.isSubmitting = true;
-
     const dados = this.form.getRawValue();
 
-    this.authService.login(dados as { matricula: string; senha: string }).subscribe({
+    this.authService.login(dados).subscribe({
       next: () => {
         this.isSubmitting = false;
-        this.router.navigate(['/agenda-tcc']); // Redireciona após o login
+        console.log('Login bem-sucedido via Cookie!');
+        sessionStorage.setItem('isLoggedIn', 'true'); // Define o sinalizador
+        this.router.navigate(['/agenda-tcc']);
       },
       error: (err) => {
         this.isSubmitting = false;
-        alert('Erro ao realizar login. Verifique suas credenciais.');
+        // Aqui usamos o tratamento genérico que configuramos no Req 7
+        alert(err.error?.mensagem || 'Erro ao realizar login.');
         console.error(err);
       }
     });
@@ -49,5 +54,9 @@ export class LoginComponent {
   fieldInvalid(name: string): boolean {
     const c = this.form.get(name);
     return !!c && c.touched && c.invalid;
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 }

@@ -14,12 +14,19 @@ export class RegisterComponent {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private http = inject(HttpClient); // Injetando o HttpClient diretamente ou via AuthService
-  
+
   isSubmitting = false;
+  passwordStrength = 0;
+  showPassword = false;
 
   form = this.fb.group({
     matricula: ['', [Validators.required, Validators.minLength(5), Validators.pattern(/^[0-9]+$/)]],
-    senha: ['', [Validators.required, Validators.minLength(6)]],
+    senha: ['', [
+      Validators.required,
+      Validators.minLength(8),
+      // Expressão regular para complexidade:
+      Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/)
+    ]],
   });
 
   submit(): void {
@@ -51,4 +58,21 @@ export class RegisterComponent {
     const c = this.form.get(name);
     return !!c && c.touched && c.invalid;
   }
+
+  // Método para calcular a força (0 a 100)
+  checkStrength() {
+    const senha = this.form.get('senha')?.value || '';
+    let strength = 0;
+
+    if (senha.length >= 8) strength += 25; // Comprimento
+    if (/[A-Z]/.test(senha)) strength += 25; // Maiúscula
+    if (/[0-9]/.test(senha)) strength += 25; // Número
+    if (/[!@#$%^&*]/.test(senha)) strength += 25; // Especial
+
+    this.passwordStrength = strength;
+  }
+
+  togglePassword() {
+  this.showPassword = !this.showPassword;
+}
 }
